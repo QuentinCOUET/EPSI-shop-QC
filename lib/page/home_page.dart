@@ -1,6 +1,9 @@
 import 'package:epsi_shop/bo/article.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import 'bo/Cart.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -35,9 +38,13 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-              onPressed: () => context.go('/cart'),
-              icon: const Icon(Icons.shopping_cart))
+          Badge(
+            label: Text("${context.watch<Cart>().articles.length}"),
+            offset: Offset(-6, 7),
+            child: IconButton(
+                onPressed: () => context.go('/cart'),
+                icon: const Icon(Icons.shopping_cart)),
+          )
         ],
       ),
       body: ListView.separated(
@@ -69,7 +76,8 @@ class ItemArticle extends StatelessWidget {
       ),
       trailing: TextButton(
         child: const Text("AJOUTER"),
-        onPressed: () {},
+        onPressed: () => context.read<Cart>()
+        .addArticle(listArticles[index]),
       ),
     );
   }
